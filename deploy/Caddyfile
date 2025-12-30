@@ -1,0 +1,36 @@
+# Global options
+{
+    email {$ACME_EMAIL:admin@example.com}
+}
+
+# Vocabulator API
+{$VOCABULATOR_DOMAIN:vocabulator.localhost} {
+    reverse_proxy vocabulator:8080
+
+    # Optional: Add request logging
+    log {
+        output stdout
+        format console
+    }
+
+    # Optional: Add compression
+    encode gzip
+
+    # Health check endpoint doesn't need logging
+    @health path /health
+    handle @health {
+        reverse_proxy vocabulator:8080
+    }
+}
+
+# Template for additional apps:
+#
+# {$MYAPP_DOMAIN:myapp.localhost} {
+#     reverse_proxy myapp:8081
+#     encode gzip
+# }
+
+# Optional: Redirect www to non-www
+# www.{$VOCABULATOR_DOMAIN} {
+#     redir https://{$VOCABULATOR_DOMAIN}{uri} permanent
+# }

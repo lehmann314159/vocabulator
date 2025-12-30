@@ -1,6 +1,6 @@
 module github.com/lehmann314159/vocabulator
 
-go 1.21
+go 1.24.0
 
 require (
 	github.com/go-chi/chi/v5 v5.2.3

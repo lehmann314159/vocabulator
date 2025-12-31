@@ -6,6 +6,9 @@ services:
     ports:
       - "80:80"
       - "443:443"
+    environment:
+      - VOCABULATOR_DOMAIN=${VOCABULATOR_DOMAIN}
+      - ACME_EMAIL=${ACME_EMAIL}
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile:ro
       - caddy_data:/data

@@ -21,9 +21,7 @@ services:
 
   # Vocabulator API
   vocabulator:
-    build:
-      context: ..
-      dockerfile: Dockerfile
+    image: lehmann314159/vocabulator:latest
     container_name: vocabulator
     expose:
       - "8080"

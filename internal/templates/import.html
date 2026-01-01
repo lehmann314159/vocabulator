@@ -1,0 +1,52 @@
+{{define "content"}}
+<hgroup>
+    <h1>Import Words</h1>
+    <p>Upload a CSV file to import words in bulk</p>
+</hgroup>
+
+<article>
+    <form hx-post="/import"
+          hx-encoding="multipart/form-data"
+          hx-target="#import-result"
+          hx-swap="innerHTML">
+
+        <label for="file">
+            CSV File
+            <input type="file" id="file" name="file" accept=".csv" required>
+        </label>
+
+        <button type="submit">Import</button>
+    </form>
+
+    <div id="import-result"></div>
+
+    <footer>
+        <details>
+            <summary>CSV Format</summary>
+            <p>The CSV file should have the following columns:</p>
+            <ul>
+                <li><strong>word</strong> (required) - The vocabulary word</li>
+                <li><strong>source</strong> (required) - Where you learned it</li>
+                <li><strong>date_learned</strong> (required) - Date in YYYY-MM-DD format</li>
+                <li><strong>part_of_speech</strong> (optional) - noun, verb, adjective, etc.</li>
+                <li><strong>example_sentence</strong> (optional) - Usage example</li>
+                <li><strong>tags</strong> (optional) - Comma-separated tags</li>
+            </ul>
+            <p>Example:</p>
+            <pre><code>word,source,date_learned,part_of_speech,example_sentence,tags
+ephemeral,Book,2024-01-15,adjective,"The ephemeral beauty of spring","nature,literature"
+ubiquitous,Article,2024-02-20,adjective,,"technology"</code></pre>
+        </details>
+    </footer>
+</article>
+
+<article>
+    <header>
+        <h2>Export Words</h2>
+    </header>
+    <p>Download all your words as a CSV file.</p>
+    <a href="/api/v1/words/export" role="button" class="secondary" download="vocabulator-export.csv">
+        Export to CSV
+    </a>
+</article>
+{{end}}

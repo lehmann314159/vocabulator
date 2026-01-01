@@ -30,6 +30,12 @@ COPY --from=builder /app/server .
 # Copy migrations
 COPY --from=builder /app/migrations ./migrations
 
+# Copy templates
+COPY --from=builder /app/internal/templates ./internal/templates
+
+# Copy static files
+COPY --from=builder /app/static ./static
+
 # Create directory for database
 RUN mkdir -p /data
 
@@ -37,6 +43,8 @@ RUN mkdir -p /data
 ENV PORT=8080
 ENV DATABASE_PATH=/data/vocabulator.db
 ENV MIGRATIONS_PATH=/app/migrations
+ENV TEMPLATES_PATH=/app/internal/templates
+ENV STATIC_PATH=/app/static
 
 # Expose port
 EXPOSE 8080

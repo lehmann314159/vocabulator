@@ -1,0 +1,118 @@
+/* Custom styles for Vocabulator */
+
+/* Ensure dark theme */
+:root {
+    color-scheme: dark;
+}
+
+/* Navigation tweaks */
+header nav ul li a {
+    text-decoration: none;
+}
+
+header nav ul:first-child li strong a {
+    color: var(--pico-primary);
+}
+
+/* Action buttons in table */
+.action-buttons {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.action-buttons a,
+.action-buttons button {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+    margin: 0;
+}
+
+/* Tags */
+mark {
+    margin-right: 0.25rem;
+    padding: 0.125rem 0.375rem;
+    border-radius: 0.25rem;
+    font-size: 0.75rem;
+}
+
+/* Flash card styling */
+#flash-card {
+    text-align: center;
+    min-height: 300px;
+}
+
+#flash-card h2 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+}
+
+#flash-card details {
+    text-align: left;
+    margin: 1rem 0;
+}
+
+/* Status messages */
+.success {
+    color: var(--pico-ins-color);
+}
+
+.error {
+    color: var(--pico-del-color);
+}
+
+.success-result {
+    border-left: 4px solid var(--pico-ins-color);
+}
+
+.error-result {
+    border-left: 4px solid var(--pico-del-color);
+}
+
+/* Delete button styling */
+.delete-btn {
+    --pico-color: var(--pico-del-color);
+    --pico-border-color: var(--pico-del-color);
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: 2rem 0;
+    color: var(--pico-muted-color);
+}
+
+/* Loading indicator for HTMX */
+.htmx-request .htmx-indicator {
+    display: inline;
+}
+
+.htmx-indicator {
+    display: none;
+}
+
+/* Table responsiveness */
+@media (max-width: 768px) {
+    table {
+        font-size: 0.875rem;
+    }
+
+    .action-buttons {
+        flex-direction: column;
+    }
+
+    th:nth-child(3),
+    td:nth-child(3) {
+        display: none;
+    }
+}
+
+/* Definition list styling */
+article dl dt {
+    font-weight: 600;
+    margin-top: 0.5rem;
+}
+
+article dl dd {
+    margin-left: 0;
+    margin-bottom: 0.5rem;
+}

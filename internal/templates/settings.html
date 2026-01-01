@@ -1,0 +1,80 @@
+{{define "content"}}
+<hgroup>
+    <h1>Settings</h1>
+    <p>Configure your Vocabulator preferences</p>
+</hgroup>
+
+<article>
+    <header>
+        <h2>API Token</h2>
+    </header>
+    <p>Enter your API token to enable write operations (add, edit, delete words).</p>
+    <p><small>The token is stored locally in your browser and never sent to any server except as an Authorization header.</small></p>
+
+    <form id="token-form" onsubmit="saveToken(event)">
+        <label for="apiToken">
+            API Token
+            <input type="password" id="apiToken" name="apiToken" placeholder="Enter your API token">
+        </label>
+
+        <div class="grid">
+            <button type="submit">Save Token</button>
+            <button type="button" class="secondary" onclick="clearToken()">Clear Token</button>
+            <button type="button" class="secondary outline" onclick="toggleVisibility()">Show/Hide</button>
+        </div>
+    </form>
+
+    <div id="token-status"></div>
+</article>
+
+<article>
+    <header>
+        <h2>Install App</h2>
+    </header>
+    <p>Vocabulator can be installed as an app on your device for quick access.</p>
+    <ul>
+        <li><strong>iOS:</strong> Tap the Share button, then "Add to Home Screen"</li>
+        <li><strong>Android:</strong> Tap the menu (3 dots), then "Add to Home Screen"</li>
+        <li><strong>Desktop:</strong> Look for the install icon in your browser's address bar</li>
+    </ul>
+</article>
+
+<script>
+    // Load existing token on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        const token = localStorage.getItem('apiToken');
+        if (token) {
+            document.getElementById('apiToken').value = token;
+            showStatus('Token is set', 'success');
+        }
+    });
+
+    function saveToken(e) {
+        e.preventDefault();
+        const token = document.getElementById('apiToken').value;
+        if (token) {
+            localStorage.setItem('apiToken', token);
+            showStatus('Token saved successfully!', 'success');
+        } else {
+            showStatus('Please enter a token', 'error');
+        }
+    }
+
+    function clearToken() {
+        localStorage.removeItem('apiToken');
+        document.getElementById('apiToken').value = '';
+        showStatus('Token cleared', 'success');
+    }
+
+    function toggleVisibility() {
+        const input = document.getElementById('apiToken');
+        input.type = input.type === 'password' ? 'text' : 'password';
+    }
+
+    function showStatus(message, type) {
+        const status = document.getElementById('token-status');
+        status.innerHTML = '<p class="' + type + '">' + message + '</p>';
+        setTimeout(() => { status.innerHTML = ''; }, 3000);
+    }
+</script>
+{{end}}

@@ -1,0 +1,24 @@
+{{if .Error}}
+<article class="error-result">
+    <p><strong>Import failed:</strong> {{.Error}}</p>
+</article>
+{{else}}
+<article class="success-result">
+    <p><strong>Import successful!</strong></p>
+    <ul>
+        <li>Imported: {{.Imported}} words</li>
+        {{if .Skipped}}<li>Skipped: {{.Skipped}} (duplicates or invalid)</li>{{end}}
+    </ul>
+    {{if .Errors}}
+    <details>
+        <summary>Errors ({{len .Errors}})</summary>
+        <ul>
+            {{range .Errors}}
+            <li>{{.}}</li>
+            {{end}}
+        </ul>
+    </details>
+    {{end}}
+    <p><a href="/">View your words</a></p>
+</article>
+{{end}}

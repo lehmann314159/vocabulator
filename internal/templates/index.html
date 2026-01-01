@@ -1,0 +1,91 @@
+{{define "content"}}
+<hgroup>
+    <h1>My Words</h1>
+    <p>{{.TotalWords}} words in your vocabulary</p>
+</hgroup>
+
+<div class="grid">
+    <div>
+        <input type="search"
+               name="search"
+               placeholder="Search words..."
+               hx-get="/"
+               hx-trigger="keyup changed delay:300ms"
+               hx-target="#word-list"
+               hx-select="#word-list"
+               hx-push-url="true"
+               value="{{.Search}}">
+    </div>
+    <div>
+        <a href="/words/new" role="button">Add Word</a>
+    </div>
+</div>
+
+<div id="word-list">
+    {{if .Words}}
+    <figure>
+        <table>
+            <thead>
+                <tr>
+                    <th>Word</th>
+                    <th>Source</th>
+                    <th>Date Learned</th>
+                    <th>Tags</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{range .Words}}
+                <tr id="word-{{.ID}}">
+                    <td>
+                        <a href="/words/{{.ID}}">{{.Word}}</a>
+                    </td>
+                    <td>{{.Source}}</td>
+                    <td>{{.DateLearned}}</td>
+                    <td>
+                        {{range .Tags}}
+                        <mark>{{.}}</mark>
+                        {{end}}
+                    </td>
+                    <td>
+                        <div class="action-buttons">
+                            <a href="/words/{{.ID}}/edit" class="secondary">Edit</a>
+                            <button class="secondary outline delete-btn"
+                                    hx-delete="/words/{{.ID}}"
+                                    hx-confirm="Delete '{{.Word}}'?"
+                                    hx-target="#word-{{.ID}}"
+                                    hx-swap="outerHTML">
+                                Delete
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                {{end}}
+            </tbody>
+        </table>
+    </figure>
+    {{else}}
+    <article>
+        <p>No words yet. <a href="/words/new">Add your first word</a> or <a href="/import">import from CSV</a>.</p>
+    </article>
+    {{end}}
+</div>
+
+{{if .TotalPages}}
+<nav>
+    <ul>
+        {{if gt .Page 1}}
+        <li><a href="?page={{subtract .Page 1}}{{if .Search}}&search={{.Search}}{{end}}">&laquo; Previous</a></li>
+        {{end}}
+    </ul>
+    <ul>
+        <li>Page {{.Page}} of {{.TotalPages}}</li>
+    </ul>
+    <ul>
+        {{if lt .Page .TotalPages}}
+        <li><a href="?page={{add .Page 1}}{{if .Search}}&search={{.Search}}{{end}}">Next &raquo;</a></li>
+        {{end}}
+    </ul>
+</nav>
+{{end}}
+{{end}}

@@ -1,0 +1,80 @@
+{{define "content"}}
+<hgroup>
+    <h1>{{if .Word.ID}}Edit Word{{else}}Add New Word{{end}}</h1>
+    <p>{{if .Word.ID}}Update the details for "{{.Word.Word}}"{{else}}Add a new word to your vocabulary{{end}}</p>
+</hgroup>
+
+<article>
+    <form {{if .Word.ID}}
+          hx-put="/words/{{.Word.ID}}"
+          {{else}}
+          hx-post="/words"
+          {{end}}
+          hx-target="body"
+          hx-push-url="true">
+
+        <label for="word">
+            Word *
+            <input type="text" id="word" name="word" value="{{.Word.Word}}" required
+                   {{if .Word.ID}}readonly{{end}}>
+        </label>
+
+        <label for="source">
+            Source *
+            <input type="text" id="source" name="source" value="{{.Word.Source}}" required
+                   placeholder="e.g., Book, Article, Conversation">
+        </label>
+
+        <label for="date_learned">
+            Date Learned *
+            <input type="date" id="date_learned" name="date_learned" value="{{.Word.DateLearned}}" required>
+        </label>
+
+        <label for="part_of_speech">
+            Part of Speech
+            <select id="part_of_speech" name="part_of_speech">
+                <option value="">-- Select --</option>
+                <option value="noun" {{if eq (deref .Word.PartOfSpeech) "noun"}}selected{{end}}>Noun</option>
+                <option value="verb" {{if eq (deref .Word.PartOfSpeech) "verb"}}selected{{end}}>Verb</option>
+                <option value="adjective" {{if eq (deref .Word.PartOfSpeech) "adjective"}}selected{{end}}>Adjective</option>
+                <option value="adverb" {{if eq (deref .Word.PartOfSpeech) "adverb"}}selected{{end}}>Adverb</option>
+                <option value="pronoun" {{if eq (deref .Word.PartOfSpeech) "pronoun"}}selected{{end}}>Pronoun</option>
+                <option value="preposition" {{if eq (deref .Word.PartOfSpeech) "preposition"}}selected{{end}}>Preposition</option>
+                <option value="conjunction" {{if eq (deref .Word.PartOfSpeech) "conjunction"}}selected{{end}}>Conjunction</option>
+                <option value="interjection" {{if eq (deref .Word.PartOfSpeech) "interjection"}}selected{{end}}>Interjection</option>
+            </select>
+        </label>
+
+        <label for="example_sentence">
+            Example Sentence
+            <textarea id="example_sentence" name="example_sentence" rows="3"
+                      placeholder="Use the word in a sentence...">{{deref .Word.ExampleSentence}}</textarea>
+        </label>
+
+        <label for="tags">
+            Tags
+            <input type="text" id="tags" name="tags" value="{{.TagsString}}"
+                   placeholder="Comma-separated tags, e.g., literature, nature">
+            <small>Separate multiple tags with commas</small>
+        </label>
+
+        <div class="grid">
+            <button type="submit">{{if .Word.ID}}Update Word{{else}}Add Word{{end}}</button>
+            <a href="/" role="button" class="secondary">Cancel</a>
+        </div>
+    </form>
+
+    {{if .Word.ID}}
+    <footer>
+        <details>
+            <summary>Lookup Definition</summary>
+            <div hx-get="/words/{{.Word.ID}}/definition"
+                 hx-trigger="revealed"
+                 hx-swap="innerHTML">
+                <progress></progress>
+            </div>
+        </details>
+    </footer>
+    {{end}}
+</article>
+{{end}}

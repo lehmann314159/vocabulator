@@ -1,0 +1,55 @@
+{{define "content"}}
+<article>
+    <header>
+        <hgroup>
+            <h1>{{.Word.Word}}</h1>
+            {{if deref .Word.PartOfSpeech}}<p><em>{{deref .Word.PartOfSpeech}}</em></p>{{end}}
+        </hgroup>
+    </header>
+
+    <dl>
+        <dt>Source</dt>
+        <dd>{{.Word.Source}}</dd>
+
+        <dt>Date Learned</dt>
+        <dd>{{.Word.DateLearned}}</dd>
+
+        {{if deref .Word.ExampleSentence}}
+        <dt>Example Sentence</dt>
+        <dd>"{{deref .Word.ExampleSentence}}"</dd>
+        {{end}}
+
+        {{if .Word.Tags}}
+        <dt>Tags</dt>
+        <dd>
+            {{range .Word.Tags}}
+            <mark>{{.}}</mark>
+            {{end}}
+        </dd>
+        {{end}}
+    </dl>
+
+    <details>
+        <summary>Lookup Definition</summary>
+        <div hx-get="/words/{{.Word.ID}}/definition"
+             hx-trigger="revealed"
+             hx-swap="innerHTML">
+            <progress></progress>
+        </div>
+    </details>
+
+    <footer>
+        <div class="grid">
+            <a href="/words/{{.Word.ID}}/edit" role="button">Edit</a>
+            <button class="secondary outline"
+                    hx-delete="/words/{{.Word.ID}}"
+                    hx-confirm="Delete '{{.Word.Word}}'?"
+                    hx-target="body"
+                    hx-push-url="/">
+                Delete
+            </button>
+            <a href="/" role="button" class="secondary">Back to List</a>
+        </div>
+    </footer>
+</article>
+{{end}}

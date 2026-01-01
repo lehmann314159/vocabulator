@@ -26,6 +26,8 @@ func main() {
 	dbPath := getEnv("DATABASE_PATH", "./vocabulator.db")
 	migrationsPath := getEnv("MIGRATIONS_PATH", "./migrations")
 	apiToken := getEnv("API_TOKEN", "")
+	templatesPath := getEnv("TEMPLATES_PATH", "./internal/templates")
+	staticPath := getEnv("STATIC_PATH", "./static")
 
 	// Connect to database
 	db, err := sql.Open("sqlite3", dbPath)
@@ -49,7 +51,14 @@ func main() {
 	dictSvc := services.NewDictionaryService()
 	wordSvc := services.NewWordService(repo, dictSvc)
 	handler := api.NewHandler(wordSvc)
-	router := api.NewRouter(handler, apiToken)
+
+	// Initialize web handler
+	webHandler, err := api.NewWebHandler(wordSvc, templatesPath)
+	if err != nil {
+		log.Fatalf("Failed to load templates: %v", err)
+	}
+
+	router := api.NewWebRouter(handler, webHandler, apiToken, staticPath)
 
 	// Create server
 	server := &http.Server{

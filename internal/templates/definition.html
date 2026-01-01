@@ -1,0 +1,24 @@
+{{if .Error}}
+<p class="error">{{.Error}}</p>
+{{else if .Definition}}
+<dl>
+    {{range .Definition.Meanings}}
+    <dt><strong>{{.PartOfSpeech}}</strong></dt>
+    <dd>
+        <ol>
+            {{range .Definitions}}
+            <li>
+                {{.Definition}}
+                {{if .Example}}<br><small>Example: "{{.Example}}"</small>{{end}}
+            </li>
+            {{end}}
+        </ol>
+    </dd>
+    {{end}}
+</dl>
+{{if .Definition.Phonetic}}
+<small>Pronunciation: {{.Definition.Phonetic}}</small>
+{{end}}
+{{else}}
+<p>No definition found.</p>
+{{end}}

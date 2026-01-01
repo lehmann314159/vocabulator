@@ -3,6 +3,7 @@ package api
 import (
 	"log"
 	"net/http"
+	"strings"
 	"time"
 )
 
@@ -63,7 +64,7 @@ func CORS(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Access-Control-Allow-Origin", "*")
 		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
-		w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+		w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
 
 		if r.Method == "OPTIONS" {
 			w.WriteHeader(http.StatusOK)
@@ -72,4 +73,39 @@ func CORS(next http.Handler) http.Handler {
 
 		next.ServeHTTP(w, r)
 	})
+}
+
+// BearerAuth returns middleware that requires a bearer token for non-GET requests
+func BearerAuth(token string) func(http.Handler) http.Handler {
+	return func(next http.Handler) http.Handler {
+		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			// Allow GET requests without auth
+			if r.Method == http.MethodGet || r.Method == http.MethodOptions {
+				next.ServeHTTP(w, r)
+				return
+			}
+
+			// If no token configured, allow all requests
+			if token == "" {
+				next.ServeHTTP(w, r)
+				return
+			}
+
+			// Check Authorization header
+			auth := r.Header.Get("Authorization")
+			if auth == "" {
+				http.Error(w, `{"error":"authorization header required"}`, http.StatusUnauthorized)
+				return
+			}
+
+			// Expect "Bearer <token>"
+			parts := strings.SplitN(auth, " ", 2)
+			if len(parts) != 2 || parts[0] != "Bearer" || parts[1] != token {
+				http.Error(w, `{"error":"invalid token"}`, http.StatusUnauthorized)
+				return
+			}
+
+			next.ServeHTTP(w, r)
+		})
+	}
 }

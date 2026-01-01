@@ -32,6 +32,7 @@ services:
       - PORT=8080
       - DATABASE_PATH=/data/vocabulator.db
       - MIGRATIONS_PATH=/app/migrations
+      - API_TOKEN=${API_TOKEN}
     volumes:
       - vocabulator_data:/data
     networks:

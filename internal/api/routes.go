@@ -6,7 +6,7 @@ import (
 )
 
 // NewRouter creates and configures the Chi router
-func NewRouter(h *Handler) *chi.Mux {
+func NewRouter(h *Handler, apiToken string) *chi.Mux {
 	r := chi.NewRouter()
 
 	// Middleware
@@ -21,6 +21,7 @@ func NewRouter(h *Handler) *chi.Mux {
 	// API v1 routes
 	r.Route("/api/v1", func(r chi.Router) {
 		r.Use(JSONContentType)
+		r.Use(BearerAuth(apiToken))
 
 		r.Route("/words", func(r chi.Router) {
 			r.Get("/", h.ListWords)

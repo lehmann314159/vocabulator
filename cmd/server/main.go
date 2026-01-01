@@ -25,6 +25,7 @@ func main() {
 	port := getEnv("PORT", "8080")
 	dbPath := getEnv("DATABASE_PATH", "./vocabulator.db")
 	migrationsPath := getEnv("MIGRATIONS_PATH", "./migrations")
+	apiToken := getEnv("API_TOKEN", "")
 
 	// Connect to database
 	db, err := sql.Open("sqlite3", dbPath)
@@ -48,7 +49,7 @@ func main() {
 	dictSvc := services.NewDictionaryService()
 	wordSvc := services.NewWordService(repo, dictSvc)
 	handler := api.NewHandler(wordSvc)
-	router := api.NewRouter(handler)
+	router := api.NewRouter(handler, apiToken)
 
 	// Create server
 	server := &http.Server{

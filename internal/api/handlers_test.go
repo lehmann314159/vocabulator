@@ -46,7 +46,7 @@ func setupTestHandler(t *testing.T) (*Handler, *chi.Mux, func()) {
 	dictSvc := services.NewDictionaryService()
 	wordSvc := services.NewWordService(repo, dictSvc)
 	handler := NewHandler(wordSvc)
-	router := NewRouter(handler)
+	router := NewRouter(handler, "")
 
 	cleanup := func() {
 		db.Close()

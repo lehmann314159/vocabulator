@@ -23,14 +23,8 @@
     }
 }
 
-# Template for additional apps:
-#
-# {$MYAPP_DOMAIN:myapp.localhost} {
-#     reverse_proxy myapp:8081
-#     encode gzip
-# }
-
-# Optional: Redirect www to non-www
-# www.{$VOCABULATOR_DOMAIN} {
-#     redir https://{$VOCABULATOR_DOMAIN}{uri} permanent
-# }
+# Oura GenUI App
+{$OURA_DOMAIN:oura.localhost} {
+    reverse_proxy oura-app:3000
+    encode gzip
+}

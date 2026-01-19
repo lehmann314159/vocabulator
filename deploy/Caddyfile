@@ -25,6 +25,9 @@
 
 # Oura GenUI App
 {$OURA_DOMAIN:oura.localhost} {
-    reverse_proxy oura-app:3000
-    encode gzip
+    reverse_proxy oura-app:3000 {
+        transport http {
+            versions 1.1
+        }
+    }
 }

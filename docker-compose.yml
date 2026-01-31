@@ -1,6 +1,6 @@
 services:
   vocabulator:
-    build: .
+    image: lehmann314159/vocabulator:latest
     container_name: vocabulator
     volumes:
       - vocabulator-data:/data

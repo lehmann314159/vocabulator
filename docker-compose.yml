@@ -2,8 +2,6 @@ services:
   vocabulator:
     build: .
     container_name: vocabulator
-    ports:
-      - "8080:8080"
     volumes:
       - vocabulator-data:/data
     environment:
@@ -17,6 +15,12 @@ services:
       timeout: 3s
       retries: 3
       start_period: 5s
+    networks:
+      - web
+
+networks:
+  web:
+    external: true
 
 volumes:
   vocabulator-data:
